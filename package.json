@@ -21,7 +21,7 @@
 		"build": "rimraf dist && tsc",
 		"ts.check": "tsc --project tsconfig.json",
 		"add-build": "git add dist",
-		"start": "ts-node src/server.ts",
+		"start": "node ./dist/src/server.js",
 		"prebuild": "tsconfig.json --fix",
 		"prestart": "npm run build"
 	},
