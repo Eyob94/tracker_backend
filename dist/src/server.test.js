@@ -45,7 +45,7 @@ describe("tests the auth process", function () {
     it("checks whether the user exists", function () { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             return [2 /*return*/, (0, supertest_1["default"])(app_1.app)
-                    .post("/login")
+                    .get("/login")
                     .send({
                     email: "eyobmalik@gmail.com",
                     password: "12345678"
