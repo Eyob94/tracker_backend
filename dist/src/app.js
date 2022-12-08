@@ -79,7 +79,7 @@ exports.app.post("/register", function (req, res) { return __awaiter(void 0, voi
                 if (success) {
                     return [2 /*return*/, res.status(200).json(user)];
                 }
-                return [2 /*return*/, res.status(400).end()];
+                return [2 /*return*/, res.status(400).json({ error: error })];
         }
     });
 }); });
