@@ -52,7 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.findUser = void 0;
 var lib_1 = __importDefault(require("../lib/lib"));
-var bcrypt = require("bcrypt");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var findUser = function (email, password) { return __awaiter(void 0, void 0, void 0, function () {
     var userData, verified, p, user;
     return __generator(this, function (_a) {
@@ -65,7 +65,7 @@ var findUser = function (email, password) { return __awaiter(void 0, void 0, voi
             case 1:
                 userData = _a.sent();
                 if (!userData) return [3 /*break*/, 3];
-                return [4 /*yield*/, bcrypt.compare(password, userData.password)];
+                return [4 /*yield*/, bcrypt_1["default"].compare(password, userData.password)];
             case 2:
                 verified = _a.sent();
                 p = userData.password, user = __rest(userData, ["password"]);

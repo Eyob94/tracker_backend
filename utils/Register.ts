@@ -1,6 +1,6 @@
 import prisma from "../lib/lib";
 
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 export interface registerTypes {
 	email: string;
@@ -26,8 +26,9 @@ const registerUser = async ({
 		return { user: null, success: false, error: "passwords don't match" };
 
 	const hash: string = await new Promise((resolve, reject) => {
-		bcrypt.genSalt(1, (err: string, salt: number) => {
-			bcrypt.hash(password, salt, (err: string, hash: string) => {
+		//@ts-ignore
+		bcrypt.genSalt(1, (err: Error | undefined, salt: number) => {
+			bcrypt.hash(password, salt, (err: Error | undefined, hash: string) => {
 				resolve(hash);
 				reject(err);
 			});

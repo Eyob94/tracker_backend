@@ -45,7 +45,6 @@ var Register_1 = __importDefault(require("../utils/Register"));
 var app = (0, express_1["default"])();
 app.use(express_1["default"].json());
 app.get("/", function (req, res) {
-    console.log("hello");
     res.json({ hello: "hi" });
 });
 app.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -57,7 +56,6 @@ app.get("/login", function (req, res) { return __awaiter(void 0, void 0, void 0,
                 return [4 /*yield*/, (0, Login_1.findUser)(email, password)];
             case 1:
                 data = _b.sent();
-                console.log(data);
                 return [2 /*return*/, res.end()];
         }
     });
@@ -82,7 +80,5 @@ app.post("/register", function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
-var server = app.listen(5000, function () {
-    console.log("\n        \uD83D\uDFE2Server ready at port 5000\n    ");
-});
+var server = app.listen(5000, function () { });
 //# sourceMappingURL=server.js.map

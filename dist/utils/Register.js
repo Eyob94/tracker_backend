@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 exports.__esModule = true;
 var lib_1 = __importDefault(require("../lib/lib"));
-var bcrypt = require("bcrypt");
+var bcrypt_1 = __importDefault(require("bcrypt"));
 var registerUser = function (_a) {
     var email = _a.email, password = _a.password, confirm = _a.confirm;
     return __awaiter(void 0, void 0, void 0, function () {
@@ -51,8 +51,9 @@ var registerUser = function (_a) {
                     if (password !== confirm)
                         return [2 /*return*/, { user: null, success: false, error: "passwords don't match" }];
                     return [4 /*yield*/, new Promise(function (resolve, reject) {
-                            bcrypt.genSalt(1, function (err, salt) {
-                                bcrypt.hash(password, salt, function (err, hash) {
+                            //@ts-ignore
+                            bcrypt_1["default"].genSalt(1, function (err, salt) {
+                                bcrypt_1["default"].hash(password, salt, function (err, hash) {
                                     resolve(hash);
                                     reject(err);
                                 });
