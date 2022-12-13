@@ -58,8 +58,8 @@ exports.app.get("/login", function (req, res) { return __awaiter(void 0, void 0,
             case 1:
                 _b = _c.sent(), success = _b.success, error = _b.error, user = _b.user;
                 if (success)
-                    return [2 /*return*/, res.status(200).end()];
-                return [2 /*return*/, res.status(400).json({ error: error })];
+                    return [2 /*return*/, res.status(200).json({ user: user, error: error, success: success })];
+                return [2 /*return*/, res.status(400).json({ error: error, success: success, user: user })];
         }
     });
 }); });
@@ -77,9 +77,9 @@ exports.app.post("/register", function (req, res) { return __awaiter(void 0, voi
             case 1:
                 _b = _c.sent(), success = _b.success, user = _b.user, error = _b.error;
                 if (success) {
-                    return [2 /*return*/, res.status(200).json(user)];
+                    return [2 /*return*/, res.status(200).json({ user: user, success: success, error: error })];
                 }
-                return [2 /*return*/, res.status(400).json({ error: error })];
+                return [2 /*return*/, res.status(400).json({ user: user, success: success, error: error })];
         }
     });
 }); });

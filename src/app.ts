@@ -15,9 +15,9 @@ app.get("/login", async (req, res) => {
 
 	const { success, error, user } = await findUser(email, password);
 
-	if (success) return res.status(200).end();
+	if (success) return res.status(200).json({ user, error, success });
 
-	return res.status(400).json({ error });
+	return res.status(400).json({ error, success, user });
 });
 
 app.post("/register", async (req, res) => {
