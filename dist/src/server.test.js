@@ -41,16 +41,86 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var app_1 = require("./app");
 var supertest_1 = __importDefault(require("supertest"));
-describe("tests the auth process", function () {
+describe("tests the login process", function () {
     it("checks whether the user exists", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
         return __generator(this, function (_a) {
-            return [2 /*return*/, (0, supertest_1["default"])(app_1.app)
-                    .get("/login")
-                    .send({
-                    email: "eyobmalik@gmail.com",
-                    password: "12345678"
-                })
-                    .expect(200)];
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, supertest_1["default"])(app_1.app).get("/login").send({
+                        email: "eyobmalik@gmail.com",
+                        password: "12345678"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(200);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("checks if wrong password is entered", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, supertest_1["default"])(app_1.app).get("/login").send({
+                        email: "eyobmalik@gmail.com",
+                        password: "123456789"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    expect(response.body.error).toBe("password not correct");
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("checks if user doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, supertest_1["default"])(app_1.app).get("/login").send({
+                        email: "eyobmalk@gmail.com",
+                        password: "123456789"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    expect(response.body.error).toBe("user not found");
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});
+describe("tests the registration process", function () {
+    it("checks whether the user exists", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, supertest_1["default"])(app_1.app).post("/register").send({
+                        email: "eyobmalik@gmail.com",
+                        password: "12345678",
+                        confirm: "12345678"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(400);
+                    expect(response.body.error).toBe("email already exists");
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it("checks if confirmed password doesn't match", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, (0, supertest_1["default"])(app_1.app).post("/register").send({
+                        email: "eyobmalik@gmail.com",
+                        password: "123456789",
+                        confimr: "1233423432"
+                    })];
+                case 1:
+                    response = _a.sent();
+                    expect(response.statusCode).toEqual(400);
+                    expect(response.body.error).toBe("passwords don't match");
+                    return [2 /*return*/];
+            }
         });
     }); });
 });
