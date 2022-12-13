@@ -5,27 +5,25 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "staging" ]
+    branches: ["staging"]
   pull_request:
-    branches: [ "staging" ]
+    branches: ["staging"]
+    types: [opened, reopened]
 
 jobs:
   build:
+    runs-on:
+      ubuntu-latest
 
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+      # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: yarn install --immutable --immutable-cache --check-cache
-    - run: yarn build
-    - run: yarn test
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          cache: "yarn"
+      - run: yarn install --immutable --immutable-cache --check-cache
+      - run: yarn build
+      - run: yarn test
