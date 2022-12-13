@@ -26,6 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: yarn
+    - run: yarn install --immutable --immutable-cache --check-cache
     - run: yarn build
     - run: yarn test
