@@ -69,13 +69,13 @@ model Employee {
   department     Department @relation(fields: [departmentId], references: [id])
   departmentId   Int
   managerId      Employee?  @relation("employees", fields: [employeeUserId], references: [userId])
-  Employee       Employee?  @relation("employees")
+  employees      Employee[] @relation("employees")
   employeeUserId String     @unique
 }
 
 model Department {
   id       Int        @id @default(autoincrement())
-  name     String     @map("dept_name")
+  name     String     @unique @map("dept_name")
   Employee Employee[]
 }
 

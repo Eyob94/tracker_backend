@@ -1,12 +1,14 @@
 import express from "express";
 import { findUser } from "../utils/Login";
 import registerUser from "../utils/Register";
-import employeeRouter from "../routes/employee";
+import employeeRouter from "../routes/employee/employee";
+import departmentRouter from "../routes/department/department";
 
 export const app = express();
 
 app.use(express.json());
 app.use("/employees", employeeRouter);
+app.use("/department", departmentRouter);
 
 app.get("/", (req, res) => {
 	res.json({ hello: "hi" });
