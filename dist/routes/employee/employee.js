@@ -53,33 +53,37 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
         }
     });
 }); });
-/* router.post(
-    "/addEmployee",
-    async (req: express.Request, res: express.Response) => {
-        const {
-            id,
-            first_name,
-            last_name,
-            DoB,
-            position,
-            salary,
-            departmentId,
-            managerId,
-        } = req.body;
-
-        await prisma.employee.create({
-            data: {
-                id,
-                first_name,
-                last_name,
-                DoB,
-                position,
-                salary,
-                departmentId,
-                managerId,
-            },
-        });
-    }
-); */
+router.post("/addEmployee", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, first_name, last_name, DoB, position, salary, departmentId, managerId;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                _a = req.body, id = _a.id, first_name = _a.first_name, last_name = _a.last_name, DoB = _a.DoB, position = _a.position, salary = _a.salary, departmentId = _a.departmentId, managerId = _a.managerId;
+                return [4 /*yield*/, lib_1["default"].employee.create({
+                        data: {
+                            id: {
+                                connect: {
+                                    id: id
+                                }
+                            },
+                            first_name: first_name,
+                            last_name: last_name,
+                            DoB: DoB,
+                            position: position,
+                            salary: salary,
+                            department: {
+                                connect: {
+                                    id: departmentId
+                                }
+                            },
+                            managerId: managerId
+                        }
+                    })];
+            case 1:
+                _b.sent();
+                return [2 /*return*/];
+        }
+    });
+}); });
 exports["default"] = router;
 //# sourceMappingURL=employee.js.map

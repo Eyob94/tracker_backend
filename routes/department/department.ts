@@ -28,7 +28,7 @@ router.post("/add", async (req: Request, res: Response) => {
 				Employee: true,
 			},
 		});
-		return res.status(200).send(department);
+		return res.status(200).json({ department });
 	} catch (error: any) {
 		if (error.code === "P2002") {
 			return res.status(400).send("Department name already exists");

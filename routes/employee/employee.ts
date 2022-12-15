@@ -10,7 +10,7 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 	return res.status(200).json({ employees });
 });
 
-/* router.post(
+router.post(
 	"/addEmployee",
 	async (req: express.Request, res: express.Response) => {
 		const {
@@ -26,17 +26,25 @@ router.get("/", async (req: express.Request, res: express.Response) => {
 
 		await prisma.employee.create({
 			data: {
-				id,
+				id: {
+					connect: {
+						id,
+					},
+				},
 				first_name,
 				last_name,
 				DoB,
 				position,
 				salary,
-				departmentId,
+				department: {
+					connect: {
+						id: departmentId,
+					},
+				},
 				managerId,
 			},
 		});
 	}
-); */
+);
 
 export default router;

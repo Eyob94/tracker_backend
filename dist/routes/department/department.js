@@ -78,7 +78,7 @@ router.post("/add", function (req, res) { return __awaiter(void 0, void 0, void 
                     })];
             case 2:
                 department = _a.sent();
-                return [2 /*return*/, res.status(200).send(department)];
+                return [2 /*return*/, res.status(200).json({ department: department })];
             case 3:
                 error_1 = _a.sent();
                 if (error_1.code === "P2002") {
