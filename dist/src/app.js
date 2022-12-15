@@ -43,8 +43,10 @@ exports.app = void 0;
 var express_1 = __importDefault(require("express"));
 var Login_1 = require("../utils/Login");
 var Register_1 = __importDefault(require("../utils/Register"));
+var employee_1 = __importDefault(require("../routes/employee"));
 exports.app = (0, express_1["default"])();
 exports.app.use(express_1["default"].json());
+exports.app.use("/employees", employee_1["default"]);
 exports.app.get("/", function (req, res) {
     res.json({ hello: "hi" });
 });
