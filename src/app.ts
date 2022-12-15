@@ -1,10 +1,12 @@
 import express from "express";
 import { findUser } from "../utils/Login";
 import registerUser from "../utils/Register";
+import employeeRouter from "../routes/employee";
 
 export const app = express();
 
 app.use(express.json());
+app.use("/employees", employeeRouter);
 
 app.get("/", (req, res) => {
 	res.json({ hello: "hi" });
@@ -30,8 +32,8 @@ app.post("/register", async (req, res) => {
 	});
 
 	if (success) {
-		return res.status(200).json(user);
+		return res.status(200).json({ user, success, error });
 	}
 
-	return res.status(400).json({ error });
+	return res.status(400).json({ user, success, error });
 });
