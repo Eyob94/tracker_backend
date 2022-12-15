@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,19 +57,26 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
     var employees;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, lib_1["default"].employee.findMany({})];
+            case 0: return [4 /*yield*/, lib_1["default"].employee.findMany({
+                    include: {
+                        employees: true
+                    }
+                })];
             case 1:
                 employees = _a.sent();
                 return [2 /*return*/, res.status(200).json({ employees: employees })];
         }
     });
 }); });
-router.post("/addEmployee", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, id, first_name, last_name, DoB, position, salary, departmentId, managerId;
+router.post("/add", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, id, first_name, last_name, DoB, position, salary, departmentId, managerId, employee, updatedEmployee, error_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _a = req.body, id = _a.id, first_name = _a.first_name, last_name = _a.last_name, DoB = _a.DoB, position = _a.position, salary = _a.salary, departmentId = _a.departmentId, managerId = _a.managerId;
+                _a = req.body.employee, id = _a.id, first_name = _a.first_name, last_name = _a.last_name, DoB = _a.DoB, position = _a.position, salary = _a.salary, departmentId = _a.departmentId, managerId = _a.managerId;
+                _b.label = 1;
+            case 1:
+                _b.trys.push([1, 5, , 6]);
                 return [4 /*yield*/, lib_1["default"].employee.create({
                         data: {
                             id: {
@@ -68,20 +86,121 @@ router.post("/addEmployee", function (req, res) { return __awaiter(void 0, void 
                             },
                             first_name: first_name,
                             last_name: last_name,
-                            DoB: DoB,
+                            DoB: new Date(DoB),
                             position: position,
                             salary: salary,
                             department: {
                                 connect: {
                                     id: departmentId
                                 }
-                            },
-                            managerId: managerId
+                            }
                         }
                     })];
+            case 2:
+                employee = _b.sent();
+                if (!!!managerId) return [3 /*break*/, 4];
+                return [4 /*yield*/, lib_1["default"].employee.update({
+                        where: {
+                            userId: employee.userId
+                        },
+                        data: {
+                            Manager: {
+                                connect: {
+                                    userId: managerId
+                                }
+                            }
+                        }
+                    })];
+            case 3:
+                updatedEmployee = _b.sent();
+                return [2 /*return*/, res.status(200).json({ employee: updatedEmployee })];
+            case 4: return [2 /*return*/, res.status(200).json({ employee: employee })];
+            case 5:
+                error_1 = _b.sent();
+                console.log(error_1);
+                return [2 /*return*/, res.status(400).json({ error: error_1 })];
+            case 6: return [2 /*return*/];
+        }
+    });
+}); });
+router
+    .route("/:id")
+    .get(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, employee, error_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                _a.label = 1;
             case 1:
-                _b.sent();
-                return [2 /*return*/];
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, lib_1["default"].employee.findUnique({
+                        where: {
+                            userId: id
+                        },
+                        include: {
+                            employees: true
+                        }
+                    })];
+            case 2:
+                employee = _a.sent();
+                return [2 /*return*/, res.status(200).json({ employee: employee })];
+            case 3:
+                error_2 = _a.sent();
+                console.log(error_2);
+                return [2 /*return*/, res.status(400).json({ error: error_2 })];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); })["delete"](function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, employee, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, lib_1["default"].employee["delete"]({
+                        where: {
+                            userId: id
+                        }
+                    })];
+            case 2:
+                employee = _a.sent();
+                return [2 /*return*/, res.status(200).json({ employee: employee })];
+            case 3:
+                error_3 = _a.sent();
+                console.log(error_3);
+                return [2 /*return*/, res.status(400).json({ error: error_3 })];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); })
+    .put(function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, employeeData, employee, error_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                employeeData = req.body.employeeData;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, lib_1["default"].employee.update({
+                        where: {
+                            userId: id
+                        },
+                        data: __assign({}, employeeData)
+                    })];
+            case 2:
+                employee = _a.sent();
+                return [2 /*return*/, res.status(200).json({ employee: employee })];
+            case 3:
+                error_4 = _a.sent();
+                console.log(error_4);
+                return [2 /*return*/, res.status(400).json({ error: error_4 })];
+            case 4: return [2 /*return*/];
         }
     });
 }); });

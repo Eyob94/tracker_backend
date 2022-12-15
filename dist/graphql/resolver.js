@@ -41,7 +41,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 exports.resolvers = void 0;
 var lib_1 = __importDefault(require("../lib/lib"));
+var schema_1 = require("./schema");
 exports.resolvers = {
+    Date: schema_1.dateScalar,
     Query: {
         users: function () { return __awaiter(void 0, void 0, void 0, function () {
             var users;
@@ -51,6 +53,24 @@ exports.resolvers = {
                     case 1:
                         users = _a.sent();
                         return [2 /*return*/, users];
+                }
+            });
+        }); },
+        user: function (parent, args) { return __awaiter(void 0, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, lib_1["default"].user.findUnique({
+                            where: {
+                                id: args.id
+                            },
+                            include: {
+                                Employee: true
+                            }
+                        })];
+                    case 1:
+                        user = _a.sent();
+                        return [2 /*return*/, user];
                 }
             });
         }); }

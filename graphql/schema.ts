@@ -1,10 +1,14 @@
+import { GraphQLScalarType, Kind } from "graphql";
+
 export const typeDefs = `#graphql
+	scalar Date
 	type User {
 		id: ID!
 		email: String!
 		password: String!
-		emailVerified: String
+		emailVerified: Date
 		blocked: Boolean
+		Employee:Employee
 	}
 
 	type Employee {
@@ -12,8 +16,8 @@ export const typeDefs = `#graphql
 		first_name: String!
 		last_name: String!
 		picture_url: String
-		Date_Hired: String!
-		DoB: String!
+		Date_Hired: Date!
+		DoB: Date!
 		position: Position
 		salary: Float!
 		departmentId: Department
@@ -37,4 +41,29 @@ export const typeDefs = `#graphql
 
 	type Query {
 		users: [User]!
-}`;
+		user(id:ID!):User
+	}
+
+
+`;
+
+export const dateScalar = new GraphQLScalarType({
+	name: "Date",
+	description: "Date custom scalar type",
+	//@ts-ignore
+	serialize(value: Date) {
+		return value.getTime(); // Convert outgoing Date to integer for JSON
+	},
+	//@ts-ignore
+	parseValue(value: number) {
+		return new Date(value); // Convert incoming integer to Date
+	},
+	parseLiteral(ast) {
+		if (ast.kind === Kind.INT) {
+			// Convert hard-coded AST string to integer and then to Date
+			return new Date(parseInt(ast.value, 10));
+		}
+		// Invalid hard-coded value (not an integer)
+		return null;
+	},
+});

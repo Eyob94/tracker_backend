@@ -1,19 +1,22 @@
-import express, { Router } from "express";
+import express, { Router, Request, Response } from "express";
 
 const router = Router();
 
 import prisma from "../../lib/lib";
 
-router.get("/", async (req: express.Request, res: express.Response) => {
-	const employees = await prisma.employee.findMany({});
+router.get("/", async (req: Request, res: Response) => {
+	const employees = await prisma.employee.findMany({
+		include: {
+			employees: true,
+		},
+	});
 
 	return res.status(200).json({ employees });
 });
 
-router.post(
-	"/addEmployee",
-	async (req: express.Request, res: express.Response) => {
-		const {
+router.post("/add", async (req: Request, res: Response) => {
+	const {
+		employee: {
 			id,
 			first_name,
 			last_name,
@@ -22,9 +25,11 @@ router.post(
 			salary,
 			departmentId,
 			managerId,
-		} = req.body;
+		},
+	} = req.body;
 
-		await prisma.employee.create({
+	try {
+		const employee = await prisma.employee.create({
 			data: {
 				id: {
 					connect: {
@@ -33,7 +38,7 @@ router.post(
 				},
 				first_name,
 				last_name,
-				DoB,
+				DoB: new Date(DoB),
 				position,
 				salary,
 				department: {
@@ -41,10 +46,94 @@ router.post(
 						id: departmentId,
 					},
 				},
-				managerId,
 			},
 		});
+
+		if (!!managerId) {
+			const updatedEmployee = await prisma.employee.update({
+				where: {
+					userId: employee.userId,
+				},
+				data: {
+					Manager: {
+						connect: {
+							userId: managerId,
+						},
+					},
+				},
+			});
+			return res.status(200).json({ employee: updatedEmployee });
+		}
+
+		return res.status(200).json({ employee });
+	} catch (error) {
+		console.log(error);
+		return res.status(400).json({ error });
 	}
-);
+});
+
+router
+	.route("/:id")
+	.get(async (req: Request, res: Response) => {
+		const {
+			params: { id },
+		} = req;
+
+		try {
+			const employee = await prisma.employee.findUnique({
+				where: {
+					userId: id,
+				},
+				include: {
+					employees: true,
+				},
+			});
+
+			return res.status(200).json({ employee });
+		} catch (error) {
+			console.log(error);
+			return res.status(400).json({ error });
+		}
+	})
+	.delete(async (req: Request, res: Response) => {
+		const {
+			params: { id },
+		} = req;
+
+		try {
+			const employee = await prisma.employee.delete({
+				where: {
+					userId: id,
+				},
+			});
+
+			return res.status(200).json({ employee });
+		} catch (error) {
+			console.log(error);
+			return res.status(400).json({ error });
+		}
+	})
+	.put(async (req: Request, res: Response) => {
+		const {
+			params: { id },
+		} = req;
+		const { employeeData } = req.body;
+
+		try {
+			const employee = await prisma.employee.update({
+				where: {
+					userId: id,
+				},
+				data: {
+					...employeeData,
+				},
+			});
+
+			return res.status(200).json({ employee });
+		} catch (error) {
+			console.log(error);
+			return res.status(400).json({ error });
+		}
+	});
 
 export default router;
